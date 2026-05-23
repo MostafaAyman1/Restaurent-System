@@ -1,0 +1,122 @@
+@model MVCimproving.Models.Order
+
+@{
+    ViewData["Title"] = "Cancel Order";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">Cancel Order</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Are you sure you want to cancel this order?</strong>
+                        <p class="mb-0">This action cannot be undone.</p>
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Order Type</dt>
+                        <dd class="col-sm-8">
+                            <strong>@Model.GetOrderType()</strong>
+                        </dd>
+
+                        <dt class="col-sm-4">Order Date</dt>
+                        <dd class="col-sm-8">@Model.OrderDate.ToString("g")</dd>
+
+                        <dt class="col-sm-4">Total Amount</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-success">@Model.TotalAmount.ToString("C")</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-warning text-dark">@Model.Status</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Items</dt>
+                        <dd class="col-sm-8">
+                            <ul class="list-unstyled">
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <li>
+                                        <small>
+                                            @item.MenuItem?.Name - @item.Quantity x @item.UnitPrice.ToString("C") = <strong>@item.GetTotal().ToString("C")</strong>
+                                        </small>
+                                    </li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+
+                    <hr />
+
+                    <form asp-action="Cancel" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="type" value="@Model.GetOrderType().Replace("-","")" />
+                        <input type="hidden" name="id" value="@Model.Id" />
+
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                                Yes, Cancel Order
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg">Go Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        border-radius: 0.5rem;
+    }
+
+    .card-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        padding: 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+    }
+
+    dl {
+        margin-bottom: 1.5rem;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #333;
+        margin-top: 0.75rem;
+    }
+
+    dd {
+        margin-bottom: 0;
+        margin-top: 0.75rem;
+    }
+
+    .list-unstyled li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .list-unstyled li:last-child {
+        border-bottom: none;
+    }
+</style>

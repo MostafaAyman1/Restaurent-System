@@ -1,0 +1,86 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] — Restaurant System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+  </head>
+  <body>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-name">Restaurant System</div>
+        <div class="brand-tagline">Management</div>
+      </div>
+      <div class="sidebar-nav">
+        @if ((User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "") == "Admin")
+        {
+            <div class="nav-section-label">Operations</div>
+            <a asp-controller="Home" asp-action="Index" class="nav-item active">Dashboard</a>
+            <a asp-controller="Orders" asp-action="Index" class="nav-item">Orders</a>
+            <a asp-controller="Customers" asp-action="Index" class="nav-item">Customers</a>
+
+            <div class="nav-section-label">Administration</div>
+            <a asp-controller="MenuItems" asp-action="Index" class="nav-item">Menu Items</a>
+            <a asp-controller="Categories" asp-action="Index" class="nav-item">Categories</a>
+        }
+        else if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <div class="nav-section-label">Orders</div>
+            <a asp-controller="Orders" asp-action="Index" class="nav-item">My Orders</a>
+        }
+        else
+        {
+            <div class="nav-section-label">Menu</div>
+            <a asp-controller="Home" asp-action="Index" class="nav-item active">Home</a>
+        }
+      </div>
+      <div class="sidebar-footer">
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <div class="user-avatar">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</div>
+            <div class="user-info">
+                <div class="user-name">@User.Identity.Name</div>
+                <div class="user-role">@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "User"</div>
+            </div>
+            <form asp-controller="Account" asp-action="Logout" method="post" style="margin-top: 10px;">
+                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Logout</button>
+            </form>
+        }
+        else
+        {
+            <div class="text-center">
+                <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-primary w-100 mb-2">Login</a>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-sm btn-outline-primary w-100">Register</a>
+            </div>
+        }
+      </div>
+    </nav>
+
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div>
+          <div class="topbar-title">@ViewData["Title"]</div>
+          <div class="topbar-breadcrumb">Restaurant System <span class="breadcrumb-sep">›</span> @ViewData["Title"]</div>
+        </div>
+        <div class="topbar-actions">
+          <a asp-controller="Orders" asp-action="Create" class="btn btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> New Order</a>
+        </div>
+      </header>
+
+      <main class="page-content">
+        @RenderBody()
+      </main>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+  </body>
+ </html>

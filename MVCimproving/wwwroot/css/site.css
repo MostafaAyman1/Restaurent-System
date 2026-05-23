@@ -1,0 +1,927 @@
+/* ============================================================
+   CSS DESIGN SYSTEM — RESTAURANT MANAGEMENT
+   Apply to: /Content/site.css or /wwwroot/css/site.css
+   ============================================================ */
+
+:root {
+  --cream:        #FAF7F2;
+  --parchment:    #F0EBE1;
+  --gold:         #C9A84C;
+  --gold-light:   #E8D5A3;
+  --gold-dark:    #8A6B28;
+  --espresso:     #1C1209;
+  --charcoal:     #2E2820;
+  --warm-gray:    #7A736A;
+  --muted:        #A8A09A;
+  --smoke:        #E8E3DB;
+  --leaf:         #3D6B4A;
+  --leaf-light:   #C6DCCA;
+  --crimson:      #8B2635;
+  --crimson-light:#F2D5D8;
+  --amber:        #C4621A;
+  --amber-light:  #F5DECE;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  --radius-sm:    6px;
+  --radius-md:    10px;
+  --radius-lg:    16px;
+  --radius-xl:    24px;
+
+  --shadow-sm:    0 1px 4px rgba(28,18,9,0.08);
+  --shadow-md:    0 4px 16px rgba(28,18,9,0.12);
+  --shadow-lg:    0 12px 40px rgba(28,18,9,0.16);
+
+  --sidebar-w:    260px;
+  --topbar-h:     68px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--parchment);
+  color: var(--charcoal);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ============================================================
+   SIDEBAR NAVIGATION
+   MVC Partial: _SidebarNav.cshtml
+   ============================================================ */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--espresso);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  padding: 28px 24px 24px;
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.brand-tagline {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 16px 24px 8px;
+  font-weight: 500;
+}
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 24px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.15s ease;
+      border-left: 3px solid var(--gold);
+      cursor: pointer;
+      /* Make all buttons look highlighted like the Dashboard button */
+      background: rgba(201,168,76,0.12);
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .nav-item:hover, .nav-item:focus {
+      background: rgba(201,168,76,0.16);
+      color: var(--gold);
+    }
+
+    .nav-item.active {
+      /* keep the same visual for active (no change) */
+      background: rgba(201,168,76,0.12);
+      color: var(--gold);
+      border-left-color: var(--gold);
+      font-weight: 500;
+    }
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.sidebar-footer {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+
+.user-info { flex: 1; overflow: hidden; }
+.user-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+.main-wrapper {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   TOP BAR
+   MVC Partial: _TopBar.cshtml
+   ============================================================ */
+.topbar {
+  height: var(--topbar-h);
+  background: var(--cream);
+  border-bottom: 1px solid var(--smoke);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  box-shadow: var(--shadow-sm);
+}
+
+.topbar-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--espresso);
+  letter-spacing: 0.01em;
+}
+
+.topbar-breadcrumb {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb-sep { color: var(--smoke); }
+
+.topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--espresso);
+}
+
+.btn-primary:hover { background: var(--gold-dark); color: var(--cream); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--charcoal);
+  border: 1px solid var(--smoke);
+}
+
+.btn-secondary:hover { background: var(--parchment); border-color: var(--muted); }
+
+.btn-danger {
+  background: var(--crimson-light);
+  color: var(--crimson);
+  border: 1px solid transparent;
+}
+
+.btn-danger:hover { background: var(--crimson); color: #fff; }
+
+.btn-success {
+  background: var(--leaf-light);
+  color: var(--leaf);
+  border: 1px solid transparent;
+}
+
+.btn-success:hover { background: var(--leaf); color: #fff; }
+
+.btn-icon {
+  width: 36px; height: 36px;
+  padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--smoke);
+  color: var(--warm-gray);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-icon:hover { background: var(--parchment); color: var(--charcoal); }
+
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-lg { padding: 12px 28px; font-size: 15px; }
+
+/* ============================================================
+   PAGE CONTENT
+   ============================================================ */
+.page-content {
+  padding: 32px;
+  flex: 1;
+}
+
+/* ============================================================
+   METRIC CARDS (Dashboard Summary)
+   MVC View: Dashboard/Index.cshtml
+   ============================================================ */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metric-card {
+  background: var(--cream);
+  border: 1px solid var(--smoke);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.metric-card:hover { box-shadow: var(--shadow-md); }
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+}
+
+.metric-card.gold::before  { background: var(--gold); }
+.metric-card.green::before { background: var(--leaf); }
+.metric-card.red::before   { background: var(--crimson); }
+.metric-card.amber::before { background: var(--amber); }
+
+.metric-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  margin-bottom: 10px;
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--espresso);
+  line-height: 1;
+}
+
+.metric-change {
+  font-size: 12px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metric-change.up   { color: var(--leaf); }
+.metric-change.down { color: var(--crimson); }
+
+/* ============================================================
+   CARDS (General)
+   ============================================================ */
+.card {
+  background: var(--cream);
+  border: 1px solid var(--smoke);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--smoke);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+.card-body { padding: 24px; }
+
+/* ============================================================
+   TABLES
+   MVC: for Orders, Reservations, Menu Items, etc.
+   ============================================================ */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  background: var(--parchment);
+  border-bottom: 1px solid var(--smoke);
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--smoke);
+  transition: background 0.12s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--parchment); }
+
+tbody td {
+  padding: 14px 16px;
+  vertical-align: middle;
+  color: var(--charcoal);
+}
+
+/* ============================================================
+   STATUS BADGES
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.badge-pending  { background: var(--amber-light);  color: var(--amber); }
+.badge-active   { background: var(--leaf-light);   color: var(--leaf); }
+.badge-complete { background: #E1F0E8;              color: #2D5A38; }
+.badge-canceled { background: var(--crimson-light); color: var(--crimson); }
+.badge-new      { background: #E8E4F8;              color: #4A3FAF; }
+
+/* ============================================================
+   FORMS
+   MVC: Create/Edit views — Order, Reservation, Menu Item, etc.
+   ============================================================ */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-grid.cols-1 { grid-template-columns: 1fr; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full { grid-column: 1 / -1; }
+
+label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--charcoal);
+  background: var(--cream);
+  border: 1px solid var(--smoke);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  appearance: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+}
+
+input::placeholder, textarea::placeholder { color: var(--muted); }
+textarea { resize: vertical; min-height: 100px; }
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A736A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.validation-error {
+  font-size: 12px;
+  color: var(--crimson);
+}
+
+/* field-validation-error class used by MVC */
+.field-validation-error { color: var(--crimson); font-size: 12px; }
+.input-validation-error { border-color: var(--crimson) !important; }
+.validation-summary-errors {
+  background: var(--crimson-light);
+  border: 1px solid var(--crimson);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  color: var(--crimson);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* ============================================================
+   ORDER ITEM TABLE (inside Order form)
+   ============================================================ */
+.order-items-table th { background: var(--espresso); color: var(--gold-light); }
+
+.order-items-table tfoot td {
+  font-weight: 500;
+  color: var(--espresso);
+  background: var(--parchment);
+  border-top: 2px solid var(--smoke);
+}
+
+.order-total {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+/* ============================================================
+   TABLE GRID (Floor Plan)
+   MVC View: Tables/FloorPlan.cshtml
+   ============================================================ */
+.floor-plan {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  padding: 24px;
+  background: var(--parchment);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--smoke);
+}
+
+.table-tile {
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.table-tile .table-num {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.table-tile.available  { background: var(--leaf-light);  color: var(--leaf); }
+.table-tile.occupied   { background: var(--crimson-light); color: var(--crimson); }
+.table-tile.reserved   { background: var(--amber-light);  color: var(--amber); }
+.table-tile.cleaning   { background: var(--smoke);        color: var(--warm-gray); }
+
+.table-tile:hover { transform: scale(1.04); box-shadow: var(--shadow-md); }
+.table-tile.available:hover  { border-color: var(--leaf); }
+.table-tile.occupied:hover   { border-color: var(--crimson); }
+.table-tile.reserved:hover   { border-color: var(--amber); }
+
+/* ============================================================
+   MENU ITEM CARDS
+   MVC View: Menu/Index.cshtml
+   ============================================================ */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.menu-card {
+  background: var(--cream);
+  border: 1px solid var(--smoke);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.menu-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: var(--parchment);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+}
+
+.menu-card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+.menu-card-category {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  font-weight: 500;
+}
+
+.menu-card-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--espresso);
+  line-height: 1.25;
+}
+
+.menu-card-desc { font-size: 12px; color: var(--warm-gray); line-height: 1.5; flex: 1; }
+
+.menu-card-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--smoke);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-price {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+/* ============================================================
+   RESERVATION TIMELINE
+   MVC View: Reservations/Index.cshtml
+   ============================================================ */
+.reservation-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: var(--cream);
+  border: 1px solid var(--smoke);
+  margin-bottom: 12px;
+  transition: box-shadow 0.15s;
+}
+
+.reservation-card:hover { box-shadow: var(--shadow-sm); }
+
+.reservation-time {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  min-width: 80px;
+  text-align: center;
+}
+
+.reservation-time small {
+  display: block;
+  font-size: 11px;
+  font-family: var(--font-body);
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.reservation-divider {
+  width: 1px;
+  background: var(--smoke);
+  align-self: stretch;
+}
+
+.reservation-info { flex: 1; }
+
+.reservation-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--espresso);
+}
+
+.reservation-meta {
+  font-size: 12px;
+  color: var(--warm-gray);
+  margin-top: 4px;
+  display: flex;
+  gap: 16px;
+}
+
+/* ============================================================
+   SEARCH AND FILTER BAR
+   ============================================================ */
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-input-wrap input {
+  padding-left: 40px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* ============================================================
+   PAGINATION
+   MVC: used with PagedList or custom pagination
+   ============================================================ */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.page-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--smoke);
+  background: var(--cream);
+  color: var(--charcoal);
+  text-decoration: none;
+  transition: all 0.12s;
+}
+
+.page-btn:hover { background: var(--parchment); border-color: var(--gold); }
+.page-btn.active { background: var(--gold); border-color: var(--gold); color: var(--espresso); font-weight: 600; }
+.page-btn.disabled { opacity: 0.4; pointer-events: none; }
+
+/* ============================================================
+   TOAST NOTIFICATIONS
+   MVC: used with TempData["Success"] / TempData["Error"]
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  top: 84px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 280px;
+  animation: slideIn 0.25s ease;
+}
+
+.toast-success { background: var(--leaf); color: #fff; }
+.toast-error   { background: var(--crimson); color: #fff; }
+.toast-info    { background: var(--espresso); color: var(--gold-light); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ============================================================
+   MODAL DIALOG
+   ============================================================ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(28,18,9,0.55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+  padding: 24px;
+}
+
+.modal {
+  background: var(--cream);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 540px;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--smoke);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--espresso);
+}
+
+.modal-close {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted);
+  font-size: 18px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.modal-close:hover { background: var(--parchment); color: var(--charcoal); }
+
+.modal-body { padding: 24px 28px; }
+
+.modal-footer {
+  padding: 16px 28px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ============================================================
+   RECEIPT / BILL PRINT VIEW
+   @media print — hides nav, prints clean receipt
+   ============================================================ */
+@media print {
+  .sidebar, .topbar, .btn, .filter-bar, .pagination { display: none !important; }
+  .main-wrapper { margin-left: 0; }
+  .page-content { padding: 0; }
+  body { background: #fff; }
+  .card { border: none; box-shadow: none; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { display: none; }
+  .main-wrapper { margin-left: 0; }
+  .form-grid { grid-template-columns: 1fr; }
+  .floor-plan { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.text-muted    { color: var(--muted); }
+.text-gold     { color: var(--gold); }
+.text-espresso { color: var(--espresso); }
+.text-sm       { font-size: 12px; }
+.text-display  { font-family: var(--font-display); }
+.fw-600        { font-weight: 600; }
+.flex          { display: flex; }
+.items-center  { align-items: center; }
+.gap-8         { gap: 8px; }
+.gap-12        { gap: 12px; }
+.gap-16        { gap: 16px; }
+.mb-16         { margin-bottom: 16px; }
+.mb-24         { margin-bottom: 24px; }
+.mb-32         { margin-bottom: 32px; }
+.ml-auto       { margin-left: auto; }
+.divider       { height: 1px; background: var(--smoke); margin: 20px 0; }
+
+/* ============================================================
+   DEMO / PREVIEW STYLES BELOW (remove in production)
+   ============================================================ */
+.demo-section {
+  margin-bottom: 48px;
+}
+.demo-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-weight: 500;
+}

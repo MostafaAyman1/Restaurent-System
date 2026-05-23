@@ -1,0 +1,157 @@
+@model MVCimproving.Models.ViewModels.CreateOrderViewModel
+
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<h2>Create Order</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label for="OrderType" class="form-label">Order Type</label>
+        <select id="OrderType" asp-for="OrderType" class="form-select">
+            <option value="">-- Select --</option>
+            <option value="DineIn">Dine In</option>
+            <option value="Takeaway">Takeaway</option>
+            <option value="Delivery">Delivery</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="OrderDate" class="form-label">Order Date</label>
+        <input asp-for="OrderDate" type="datetime-local" id="OrderDate" name="OrderDate" class="form-control" />
+    </div>
+
+    <div id="typeSpecific" class="mb-3">
+        <div id="deliveryFields" style="display:none;">
+            <label class="form-label">Delivery Address</label>
+            <input class="form-control" name="DeliveryAddress" />
+            <label class="form-label mt-2">Delivery Fee</label>
+            <input class="form-control" name="DeliveryFee" type="number" step="0.01" />
+        </div>
+        <div id="dineFields" style="display:none;">
+            <label class="form-label">Table Number</label>
+            <input class="form-control" name="TableNumber" type="number" />
+        </div>
+        <div id="takeawayFields" style="display:none;">
+            <label class="form-label">Pickup Time</label>
+            <input class="form-control" name="PickupTime" placeholder="e.g. 18:30" />
+        </div>
+    </div>
+
+    <h4>Order Items</h4>
+    <div id="items">
+        <div class="item-row row mb-2">
+            <div class="col-6">
+                <select class="form-select menu-item-select" name="Items[0].MenuItemId">
+                    <option value="">-- Select Menu Item --</option>
+                    @foreach(var m in (IEnumerable<MVCimproving.Models.MenuItem>)ViewBag.MenuItems)
+                    {
+                        <option value="@m.Id" data-price="@m.Price">@m.Name (@m.Price.ToString("C"))</option>
+                    }
+                </select>
+            </div>
+            <div class="col-2">
+                <input type="number" min="1" value="1" class="form-control qty-input" name="Items[0].Quantity" />
+            </div>
+            <div class="col-2">
+                <input type="text" readonly class="form-control unit-price" name="Items[0].UnitPrice" />
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-danger remove-item">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="button" id="addItem" class="btn btn-secondary">Add Item</button>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Total: </label>
+        <span id="orderTotal">0.00</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+</form>
+
+@section Scripts {
+    <script>
+        (function(){
+            let idx = 1;
+            function updateUnitPrice(select, unitPriceInput){
+                const option = select.options[select.selectedIndex];
+                const price = option ? option.getAttribute('data-price') : 0;
+                unitPriceInput.value = price || '';
+                updateTotal();
+            }
+
+            function updateTotal(){
+                let total = 0;
+                document.querySelectorAll('#items .item-row').forEach(function(row){
+                    const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
+                    const price = parseFloat(row.querySelector('.unit-price').value) || 0;
+                    total += qty * price;
+                });
+
+                // add delivery fee if present
+                const deliveryFeeEl = document.querySelector('input[name="DeliveryFee"]');
+                const deliveryFee = deliveryFeeEl ? parseFloat(deliveryFeeEl.value) || 0 : 0;
+                total += deliveryFee;
+
+                document.getElementById('orderTotal').innerText = total.toFixed(2);
+            }
+
+            document.getElementById('OrderType').addEventListener('change', function(e){
+                const val = e.target.value;
+                document.getElementById('deliveryFields').style.display = val === 'Delivery' ? 'block' : 'none';
+                document.getElementById('dineFields').style.display = val === 'DineIn' ? 'block' : 'none';
+                document.getElementById('takeawayFields').style.display = val === 'Takeaway' ? 'block' : 'none';
+                updateTotal();
+            });
+
+            document.getElementById('addItem').addEventListener('click', function(){
+                const container = document.getElementById('items');
+                const template = container.querySelector('.item-row');
+                const clone = template.cloneNode(true);
+                clone.querySelectorAll('select, input').forEach(function(el){
+                    if(el.name){
+                        el.name = el.name.replace(/Items\[0\]/, 'Items['+idx+']');
+                        if(el.classList.contains('unit-price')) el.value = '';
+                        if(el.classList.contains('qty-input')) el.value = '1';
+                    }
+                });
+                container.appendChild(clone);
+                idx++;
+            });
+
+            document.addEventListener('change', function(e){
+                if(e.target.classList && e.target.classList.contains('menu-item-select')){
+                    const row = e.target.closest('.item-row');
+                    const priceInput = row.querySelector('.unit-price');
+                    updateUnitPrice(e.target, priceInput);
+                }
+                if(e.target.classList && e.target.classList.contains('qty-input')) updateTotal();
+                if(e.target.name === 'DeliveryFee') updateTotal();
+            });
+
+            document.getElementById('items').addEventListener('click', function(e){
+                if(e.target.classList.contains('remove-item')){
+                    const row = e.target.closest('.item-row');
+                    row.remove();
+                    updateTotal();
+                }
+            });
+
+            // init prices for first row
+            document.querySelectorAll('.menu-item-select').forEach(function(s){
+                const row = s.closest('.item-row');
+                updateUnitPrice(s, row.querySelector('.unit-price'));
+            });
+
+            updateTotal();
+        })();
+    </script>
+}
